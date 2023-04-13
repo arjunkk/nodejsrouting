@@ -122,38 +122,6 @@ router.post('/v1/community', (req, res) => {
     })
 })
 
-// router.get('/v1/community',(req,res)=>{
-//         res.render('createcommunity');
-// })
-
-// router.post('/v1/community',(req,res)=>{
-//     var id = Snowflake.generate();
-//     var name = req.body.name;
-//     var slug = req.body.slug;
-//     var owner = req.body.owner;
-
-//     const date = new Date();
-//     const options = { timeZone: 'Asia/Kolkata' };
-//     const dateString = date.toLocaleDateString('en-US', options); // Returns something like "4/22/2021"
-//     const timeString = date.toLocaleTimeString('en-US', options); // Returns something like "8:47:30 AM"
-
-//     const datetime = dateString + ' ' + timeString;
-//     const created_at = moment(datetime, 'M/D/YYYY h:mm:ss A').format('YYYY-MM-DD HH:mm:ss');
-//     const updated_at= created_at;
-
-//     conn.connect((error)=>{
-//         values = [id,name,slug,owner,created_at,updated_at];
-//         sql = "INSERT INTO community (id,name,slug,owner,created_at,updated_at) VALUES(?,?,?,?,?,?)";
-//         conn.query(sql,values,(error,result)=>{
-//             if (error) throw error;
-//             res.send("community created successfull"+result.insertId);
-//             res.render('createcommunity'); // pass the result as a property of an object
-//         })
-//     })
-// })
-
-
-
 router.get('/v1/community/:id/members', (req, res) => {
     res.send('Hello World!')
 })
