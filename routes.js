@@ -59,9 +59,10 @@ router.get('/v1/auth/signup', (req, res) => {
 
 router.post('/v1/auth/signup', (req, res) => {
     var id = Snowflake.generate();
-    var name = req.body.name;
-    var email = req.body.email;
-    var password = req.body.password;
+    // var name = req.body.name;
+    // var email = req.body.email;
+    // var password = req.body.password;
+    const {name,email,password}= req.body;
     //var created_at = Date.now();
     const date = new Date();
     const options = { timeZone: 'Asia/Kolkata' };
@@ -81,14 +82,29 @@ router.post('/v1/auth/signup', (req, res) => {
     })
 })
 
+router.get('/v1/auth/signin',(req,res)=>{
+    res.render('signin');
+})
+
 router.post('/v1/auth/signin', (req, res) => {
-    var email = req.body.email;
-    var password = req.body.password;
+    // var email = req.body.email;
+    // var password = req.body.password;
+    const {email,password}=req.body;
+
+    const sql ="SELECT email,password FROM user WHERE email=?";
+    conn.query(sql,[email],(error,result)=>{
+        if(error) throw error;
+        const user = result[0];
+    if(!user){
+        return res.status(401).json({ message: 'Invalid email or password' });
+    }
+    })
+    
 
 })
 
 router.get('/v1/auth/me', (req, res) => {
-    res.send('Hello World!')
+    res.send('YOU ARE IN /v1/auth/me');
 })
 
 /*                            community routes                                         */
@@ -99,9 +115,10 @@ router.get('/v1/community', (req, res) => {
 
 router.post('/v1/community', (req, res) => {
     var id = Snowflake.generate();
-    var name = req.body.name;
-    var slug = req.body.slug;
-    var owner = req.body.owner;
+    // var name = req.body.name;
+    // var slug = req.body.slug;
+    // var owner = req.body.owner;
+    const {name,slug,owner}= req.body;
 
     const date = new Date();
     const options = { timeZone: 'Asia/Kolkata' };
@@ -155,15 +172,15 @@ router.post('/v1/community', (req, res) => {
 
 
 router.get('/v1/community/:id/members', (req, res) => {
-    res.send('Hello World!')
+    res.send('you are on /v1/community/:id')
 })
 
 router.get('/v1/community/me/owner', (req, res) => {
-    res.send('Hello World!')
+    res.send('you are on /v1/community/me/owner')
 })
 
 router.get('/v1/community/me/owner', (req, res) => {
-    res.send('Hello World!')
+    res.send('you are on /v1/community/me/owner')
 })
 
 /*                            member routes                                              */
@@ -174,9 +191,10 @@ router.get('/v1/member', (req, res) => {
 
 router.post('/v1/member', (req, res) => {
     var id = Snowflake.generate();
-    var community = req.body.community;
-    var user = req.body.user;
-    var role = req.body.role;
+    // var community = req.body.community;
+    // var user = req.body.user;
+    // var role = req.body.role;
+    const {community,user,role}= req.body;
 
     conn.connect((error)=>{
         const values =[id, community,user,created_at];
@@ -188,8 +206,22 @@ router.post('/v1/member', (req, res) => {
     })
 })
 
+router.get('/v1/member/:id',(req,res)=>{
+    res.render('deletemember');
+})
+
 router.post('/v1/member/:id', (req, res) => {
-    res.send('Hello World!')
+    var id = req.body.id;
+
+    const values =[{value:id}];
+
+    conn.connect((error)=>{
+        var sql = "DELETE FROM member WHERE id=? ";
+        conn.query(sql,values,(error,result)=>{
+            if(error) throw error;
+            res.send("member deleted successfully "+result.insertId);
+        })
+    })
 })
 
 /*                                                                                     */
